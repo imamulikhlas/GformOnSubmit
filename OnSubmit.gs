@@ -33,20 +33,30 @@ function onFormSubmit(e) {
     // Mengambil data dari baris dengan 'Id' terakhir
     var lastRowData = formResponsesSheet.getRange(lastIdRow, 1, 1, formResponsesSheet.getLastColumn()).getValues()[0];
 
-    // Mengambil header dari "Form Rentalan"
+    // Mengambil header dari "Form Rentalan" dan "List Perental"
     var headers = formResponsesSheet.getRange(1, 1, 1, formResponsesSheet.getLastColumn()).getValues()[0];
+    var listRentalHeaders = listRentalSheet.getRange(1, 1, 1, listRentalSheet.getLastColumn()).getValues()[0];
 
+    // Get index for "Timestamp" and "FOTO IDENTITAS" from "Form Rentalan"
     var timestampIndex = headers.indexOf("Timestamp");
     var fotoIdentitasIndex = headers.indexOf("FOTO IDENTITAS");
 
-    if (timestampIndex != -1 && fotoIdentitasIndex != -1) {
+    // Get index for "Tanggal" and "Foto Identitas" from "List Perental"
+    var tanggalIndexInListRental = listRentalHeaders.indexOf("Tanggal");
+    var fotoIdentitasIndexInListRental = listRentalHeaders.indexOf("Foto Identitas");
+
+    if (timestampIndex != -1 && fotoIdentitasIndex != -1 && tanggalIndexInListRental != -1 && fotoIdentitasIndexInListRental != -1) {
         var timestampValue = lastRowData[timestampIndex];
         var fotoIdentitasValue = lastRowData[fotoIdentitasIndex];
         Logger.log("Timestamp Value: " + timestampValue);
         Logger.log("FOTO IDENTITAS Value: " + fotoIdentitasValue);
 
-        listRentalSheet.appendRow([timestampValue, fotoIdentitasValue]);
+        var newRowData = new Array(listRentalHeaders.length).fill(""); // Membuat array dengan panjang yang sama dengan jumlah kolom di List Perental, diisi dengan string kosong
+        newRowData[tanggalIndexInListRental] = timestampValue;
+        newRowData[fotoIdentitasIndexInListRental] = fotoIdentitasValue;
+
+        listRentalSheet.appendRow(newRowData); // Menambahkan data ke List Perental
     } else {
-        Logger.log("Kolom 'Timestamp' atau 'FOTO IDENTITAS' tidak ditemukan dalam lembar kerja 'Form Rentalan'.");
+        Logger.log("Kolom yang diperlukan tidak ditemukan dalam lembar kerja yang sesuai.");
     }
 }
