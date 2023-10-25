@@ -25,6 +25,9 @@ function onFormSubmit(e) {
         }
     }
 
+    // Menghitung ID baru
+    var newId = lastIdRow != -1 ? parseInt(formResponsesSheet.getRange(lastIdRow, 1).getValue()) + 1 : 1;
+
     if (lastIdRow == -1) {
         Logger.log("Tidak dapat menemukan baris dengan 'Id' yang valid.");
         return;
@@ -39,21 +42,85 @@ function onFormSubmit(e) {
 
     // Get index for "Timestamp" and "FOTO IDENTITAS" from "Form Rentalan"
     var timestampIndex = headers.indexOf("Timestamp");
+    var tanggalAmbilIndex = headers.indexOf("Tanggal Ambil");
+    var tanggalRentalIndex = headers.indexOf("Tanggal Rental");
+    var pilihKostumIndex = headers.indexOf("Pilih Kostum");
+    var pilihLainLainIndex = headers.indexOf("KARAKTER LAIN LAIN SILAHKAN ISI DI SINI (TIDAK ADA DI LIST) ");
+    var pengirimanIndex = headers.indexOf("Pengiriman");
+    var hargaRentalIndex = headers.indexOf("Harga Rental");
+    var namaLengkapIndex = headers.indexOf("Nama Lengkap");
+    var alamatLengkapIndex = headers.indexOf("Alamat Lengkap");
+    var akunSosmedIndex = headers.indexOf("Akun Sosmed (Instagram/Facebook Yang Active!)");
+    var hpWhatsappIndex = headers.indexOf("HP/Whatsapp (isikan No HP)");
+    var kontakDaruratIndex = headers.indexOf("Kontak Darurat (isikan No HP)");
     var fotoIdentitasIndex = headers.indexOf("FOTO IDENTITAS");
+    var fotoSelfieIndex = headers.indexOf("FOTO SELFIE");
+    var buktiPembayaranIndex = headers.indexOf("BUKTI PEMBAYARAN");
+    var profileSosmedIndex = headers.indexOf("PROFILE SOSMED");
+    var buktiRentalIndex = headers.indexOf("BUKTI RENTALAN TEMPAT LAIN");
 
     // Get index for "Tanggal" and "Foto Identitas" from "List Perental"
     var tanggalIndexInListRental = listRentalHeaders.indexOf("Tanggal");
+    var tanggalAmbilIndexInListRental = listRentalHeaders.indexOf("Tanggal Ambil");
+    var tanggalRentalIndexInListRental = listRentalHeaders.indexOf("Tanggal Rental");
+    var pengirimanIndexInListRental = listRentalHeaders.indexOf("Pengiriman");
+    var krakterCosplayIndexInListRental = listRentalHeaders.indexOf("Krakter Cosplay");
+    var hargaRentalIndexInListRental = listRentalHeaders.indexOf("Harga Rental");
+    var namaIndexInListRental = listRentalHeaders.indexOf("Nama");
+    var alamatIndexInListRental = listRentalHeaders.indexOf("Alamat");
+    var akunSosmedIndexInListRental = listRentalHeaders.indexOf("Akun Sosmed");
+    var hpWhatsappIndexInListRental = listRentalHeaders.indexOf("Hp/Whatsapp");
+    var kontakDaruratIndexInListRental = listRentalHeaders.indexOf("Kontak Darurat");
     var fotoIdentitasIndexInListRental = listRentalHeaders.indexOf("Foto Identitas");
+    var fotoSelfieIndexInListRental = listRentalHeaders.indexOf("Foto Selfie");
+    var profileSosmedIndexInListRental = listRentalHeaders.indexOf("Ss Profile Sosmed");
+    var buktiRentalIndexInListRental = listRentalHeaders.indexOf("Ss Bukti Rentalan Tempat Lain");
+    var buktiPembayaranIndexInListRental = listRentalHeaders.indexOf("Bukti Pembayaran");
 
     if (timestampIndex != -1 && fotoIdentitasIndex != -1 && tanggalIndexInListRental != -1 && fotoIdentitasIndexInListRental != -1) {
-        var timestampValue = lastRowData[timestampIndex];
-        var fotoIdentitasValue = lastRowData[fotoIdentitasIndex];
-        Logger.log("Timestamp Value: " + timestampValue);
-        Logger.log("FOTO IDENTITAS Value: " + fotoIdentitasValue);
 
+        // Definisikan data yang ingin diambil
+        var timestampValue = lastRowData[timestampIndex];
+        var tanggalAmbilValue = lastRowData[tanggalAmbilIndex];
+        var tanggalRentalValue = lastRowData[tanggalRentalIndex];
+        var pilihKostumValue = lastRowData[pilihKostumIndex];
+        var pilihLainLainValue = lastRowData[pilihLainLainIndex];
+        var pengirimanValue = lastRowData[pengirimanIndex];
+        var hargaRentalValue = lastRowData[hargaRentalIndex];
+        var namaLengkapValue = lastRowData[namaLengkapIndex];
+        var alamatLengkapValue = lastRowData[alamatLengkapIndex];
+        var akunSosmedValue = lastRowData[akunSosmedIndex];
+        var hpWhatsappValue = lastRowData[hpWhatsappIndex];
+        var kontakDaruratValue = lastRowData[kontakDaruratIndex];
+        var buktiPembayaranValue = lastRowData[buktiPembayaranIndex];
+        var profileSosmedValue = lastRowData[profileSosmedIndex];
+        var buktiRentalValue = lastRowData[buktiRentalIndex];
+        var fotoIdentitasValue = lastRowData[fotoIdentitasIndex];
+        var fotoSelfieValue = lastRowData[fotoSelfieIndex];
+        Logger.log("Timestamp Value: " + timestampValue);
+
+        // Kirim data ke sheet List Perental
         var newRowData = new Array(listRentalHeaders.length).fill(""); // Membuat array dengan panjang yang sama dengan jumlah kolom di List Perental, diisi dengan string kosong
+        if (pilihKostumValue === "LAIN LAIN") {
+          pilihKostumValue = pilihLainLainValue;
+        }
+        newRowData[0] = newId; // Mengisi kolom ID dengan ID baru
         newRowData[tanggalIndexInListRental] = timestampValue;
+        newRowData[tanggalAmbilIndexInListRental] = tanggalAmbilValue;
+        newRowData[tanggalRentalIndexInListRental] = tanggalRentalValue;
+        newRowData[krakterCosplayIndexInListRental] = pilihKostumValue;
+        newRowData[pengirimanIndexInListRental] = pengirimanValue;
+        newRowData[hargaRentalIndexInListRental] = hargaRentalValue;
+        newRowData[namaIndexInListRental] = namaLengkapValue;
+        newRowData[alamatIndexInListRental] = alamatLengkapValue;
+        newRowData[akunSosmedIndexInListRental] = akunSosmedValue;
+        newRowData[hpWhatsappIndexInListRental] = hpWhatsappValue;
+        newRowData[kontakDaruratIndexInListRental] = kontakDaruratValue;
+        newRowData[buktiPembayaranIndexInListRental] = buktiPembayaranValue;
+        newRowData[profileSosmedIndexInListRental] = profileSosmedValue;
+        newRowData[buktiRentalIndexInListRental] = buktiRentalValue;
         newRowData[fotoIdentitasIndexInListRental] = fotoIdentitasValue;
+        newRowData[fotoSelfieIndexInListRental] = fotoSelfieValue;
 
         listRentalSheet.appendRow(newRowData); // Menambahkan data ke List Perental
     } else {
