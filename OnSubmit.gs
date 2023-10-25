@@ -1,3 +1,24 @@
+function sendWhatsAppMessage(chatId, message) {
+  var idInstance = '7103870108'; // Ganti dengan idInstance Anda
+  var apiTokenInstance = '9c8d195d81004a22b3ec961b4ab397d5ba8d47646faf4efabc'; // Ganti dengan apiTokenInstance Anda
+
+  var url = 'https://api.green-api.com/waInstance' + idInstance + '/sendMessage/' + apiTokenInstance;
+
+  var payload = {
+    'chatId': chatId,
+    'message': message
+  };
+
+  var options = {
+    'method': 'post',
+    'contentType': 'application/json',
+    'payload': JSON.stringify(payload)
+  };
+
+  var response = UrlFetchApp.fetch(url, options);
+
+  Logger.log(response.getContentText()); // Untuk melihat respon dari permintaan HTTP
+}
 function onFormSubmit(e) {
     Logger.log("Function onFormSubmit triggered.");
 
@@ -123,6 +144,11 @@ function onFormSubmit(e) {
         newRowData[fotoSelfieIndexInListRental] = fotoSelfieValue;
 
         listRentalSheet.appendRow(newRowData); // Menambahkan data ke List Perental
+
+        var chatId = '6287786776251@c.us'; // Ganti dengan chatId yang sesuai
+        var message = '==========================='+'\n' +'*Orderan Baru Rentalan Cosplay.Krw_*' + '\n' + 'Nama: '+ namaLengkapValue + '\n' +'Kostum: ' + pilihKostumValue + '\n' + 'Tanggal Order:  ' + timestampValue + '\n' +'Tanggal Rental: ' + tanggalRentalValue + '\n' + 'Akun IG: ' + akunSosmedValue + '\n'+ '\n'+ 'Segera lakukan pengecekan dan melakukan pengiriman ya sayangku💝💝💝' +'\n'+'==========================='; 
+
+  sendWhatsAppMessage(chatId, message);
     } else {
         Logger.log("Kolom yang diperlukan tidak ditemukan dalam lembar kerja yang sesuai.");
     }
